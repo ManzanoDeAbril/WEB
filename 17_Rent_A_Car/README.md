@@ -188,3 +188,25 @@ Se implementó la entidad principal Vehículo para el sistema Rent A Car.
 
 La implementación utiliza Express, MySQL y Sequelize para la gestión de datos.
 
+Rutas públicas
+
+POST /usuarios/register
+POST /usuarios/login
+GET /
+
+Rutas protegidas (requieren JWT)
+
+GET /vehiculos
+POST /vehiculos
+PUT /vehiculos/:id
+DELETE /vehiculos/:id
+
+GET /reservas
+POST /reservas
+PUT /reservas/:id
+DELETE /reservas/:id
+
+Header requerido:
+
+Authorization: Bearer <token>
+
