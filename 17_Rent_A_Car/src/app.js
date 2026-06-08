@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+const { sequelize } = require('../models');
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +22,14 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo en puerto 3000');
-});
+sequelize.authenticate()
+    .then(() => {
+        console.log('Conexión Sequelize exitosa');
+
+        app.listen(3000, () => {
+            console.log('Servidor corriendo en puerto 3000');
+        });
+    })
+    .catch(error => {
+        console.error('Error de conexión Sequelize:', error);
+    });

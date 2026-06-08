@@ -1,12 +1,21 @@
-const db = require('../config/database');
+const { Vehiculo } = require('../../models');
 
 exports.obtenerVehiculos = async (req, res) => {
+
     try {
-        const [rows] = await db.query('SELECT * FROM vehiculos');
-        res.json(rows);
+
+        const vehiculos = await Vehiculo.findAll();
+
+        res.json(vehiculos);
+
     } catch (error) {
-        res.status(500).json({ error: error.message });
+
+        res.status(500).json({
+            error: error.message
+        });
+
     }
+
 };
 
 exports.crearVehiculo = async (req, res) => {
@@ -29,27 +38,19 @@ exports.crearVehiculo = async (req, res) => {
 
     try {
 
-        const query = `
-            INSERT INTO vehiculos
-            (marca, modelo, anio, patente, color, kilometraje, disponible, createdAt, updatedAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
-            `;
-
-        
-        const [result] = await db.query(query, [
+        const vehiculo = await Vehiculo.create({
             marca,
             modelo,
             anio,
             patente,
             color,
-            kilometraje || 0,
-            disponible ?? true
-        ]);     
-        
+            kilometraje: kilometraje || 0,
+            disponible: disponible ?? true
+        });
 
         res.status(201).json({
             mensaje: 'Vehículo creado',
-            id: result.insertId
+            id: vehiculo.id
         });
 
     } catch (error) {
@@ -59,29 +60,31 @@ exports.crearVehiculo = async (req, res) => {
         });
 
     }
+
 };
 
 exports.obtenerVehiculoPorId = async (req, res) => {
 
     try {
 
-        const [rows] = await db.query(
-            'SELECT * FROM vehiculos WHERE id = ?',
-            [req.params.id]
+        const vehiculo = await Vehiculo.findByPk(
+            req.params.id
         );
 
-        if (rows.length === 0) {
+        if (!vehiculo) {
             return res.status(404).json({
                 error: 'Vehículo no encontrado'
             });
         }
 
-        res.json(rows[0]);
+        res.json(vehiculo);
 
     } catch (error) {
+
         res.status(500).json({
             error: error.message
         });
+
     }
 
 };
@@ -100,68 +103,66 @@ exports.actualizarVehiculo = async (req, res) => {
 
     try {
 
-        const [result] = await db.query(
-            `UPDATE vehiculos
-             SET marca = ?,
-                 modelo = ?,
-                 anio = ?,
-                 patente = ?,
-                 color = ?,
-                 kilometraje = ?,
-                 disponible = ?,
-                 updatedAt = NOW()
-             WHERE id = ?`,
-            [
-                marca,
-                modelo,
-                anio,
-                patente,
-                color,
-                kilometraje,
-                disponible,
-                req.params.id
-            ]
+        const vehiculo = await Vehiculo.findByPk(
+            req.params.id
         );
 
-        if (result.affectedRows === 0) {
+        if (!vehiculo) {
             return res.status(404).json({
                 error: 'Vehículo no encontrado'
             });
         }
+
+        await vehiculo.update({
+            marca,
+            modelo,
+            anio,
+            patente,
+            color,
+            kilometraje,
+            disponible
+        });
 
         res.json({
             mensaje: 'Vehículo actualizado'
         });
 
     } catch (error) {
+
         res.status(500).json({
             error: error.message
         });
+
     }
+
 };
 
 exports.eliminarVehiculo = async (req, res) => {
 
     try {
 
-        const [result] = await db.query(
-            'DELETE FROM vehiculos WHERE id = ?',
-            [req.params.id]
+        const vehiculo = await Vehiculo.findByPk(
+            req.params.id
         );
 
-        if (result.affectedRows === 0) {
+        if (!vehiculo) {
             return res.status(404).json({
                 error: 'Vehículo no encontrado'
             });
         }
+
+        await vehiculo.destroy();
 
         res.json({
             mensaje: 'Vehículo eliminado'
         });
 
     } catch (error) {
+
         res.status(500).json({
             error: error.message
         });
+
     }
+
 };

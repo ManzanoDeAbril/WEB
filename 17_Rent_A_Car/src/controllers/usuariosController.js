@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const { Usuario } = require('../../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -20,12 +20,11 @@ exports.registrarUsuario = async (req, res) => {
 
     try {
 
-        const [usuario] = await db.query(
-            'SELECT id FROM usuarios WHERE email = ?',
-            [email]
-        );
+        const usuarioExistente = await Usuario.findOne({
+            where: { email }
+        });
 
-        if (usuario.length > 0) {
+        if (usuarioExistente) {
             return res.status(409).json({
                 error: 'El correo ya está registrado'
             });
@@ -33,19 +32,15 @@ exports.registrarUsuario = async (req, res) => {
 
         const passwordHash = await bcrypt.hash(password, 10);
 
-        const [result] = await db.query(`
-            INSERT INTO usuarios
-            (nombre, email, password, createdAt, updatedAt)
-            VALUES (?, ?, ?, NOW(), NOW())
-        `, [
+        const usuario = await Usuario.create({
             nombre,
             email,
-            passwordHash
-        ]);
+            password: passwordHash
+        });
 
         res.status(201).json({
             mensaje: 'Usuario registrado',
-            id: result.insertId
+            id: usuario.id
         });
 
     } catch (error) {
@@ -55,6 +50,7 @@ exports.registrarUsuario = async (req, res) => {
         });
 
     }
+
 };
 
 exports.loginUsuario = async (req, res) => {
@@ -69,18 +65,15 @@ exports.loginUsuario = async (req, res) => {
 
     try {
 
-        const [usuarios] = await db.query(
-            'SELECT * FROM usuarios WHERE email = ?',
-            [email]
-        );
+        const usuario = await Usuario.findOne({
+            where: { email }
+        });
 
-        if (usuarios.length === 0) {
+        if (!usuario) {
             return res.status(401).json({
                 error: 'Credenciales incorrectas'
             });
         }
-
-        const usuario = usuarios[0];
 
         const passwordValida = await bcrypt.compare(
             password,

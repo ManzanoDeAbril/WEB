@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'reservas'
   });
 
+    Reserva.associate = function(models) {
+    Reserva.belongsTo(models.Vehiculo, {
+      foreignKey: 'vehiculo_id'
+    });
+  };
+
   return Reserva;
 
 };

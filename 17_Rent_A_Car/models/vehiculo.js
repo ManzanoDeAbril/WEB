@@ -9,9 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-    }
+static associate(models) {
+  Vehiculo.hasMany(models.Reserva, {
+    foreignKey: 'vehiculo_id'
+  });
+}
   }
   Vehiculo.init({
     marca: DataTypes.STRING,
@@ -27,3 +29,4 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Vehiculo;
 };
+
