@@ -27,13 +27,24 @@ module.exports = (sequelize, DataTypes) => {
     estado: {
       type: DataTypes.STRING(20),
       defaultValue: 'pendiente'
+    },
+
+    // ── rq-06: kilometraje al entregar y al devolver ──────────────────────
+    km_entrega: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+
+    km_devolucion: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
 
   }, {
     tableName: 'reservas'
   });
 
-    Reserva.associate = function(models) {
+  Reserva.associate = function(models) {
     Reserva.belongsTo(models.Vehiculo, {
       foreignKey: 'vehiculo_id'
     });
