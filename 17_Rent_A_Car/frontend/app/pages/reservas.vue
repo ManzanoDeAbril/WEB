@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  middleware: 'auth'
+})
 import { ref, onMounted } from 'vue'
 import { API_URL } from '../composables/api'
 

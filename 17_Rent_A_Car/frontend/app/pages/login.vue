@@ -67,7 +67,11 @@ const login = async () => {
       Iniciar sesión
     </button>
 
-    <p>{{ error }}</p>
+    <NuxtLink to="/register">
+     Crear cuenta
+    </NuxtLink>
+
+    <p>{{ error }}</p>  
 
   </div>
 
