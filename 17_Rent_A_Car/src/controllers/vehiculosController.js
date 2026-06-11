@@ -166,3 +166,51 @@ exports.eliminarVehiculo = async (req, res) => {
     }
 
 };
+
+// rq-07: Disponibilidad por fechas
+exports.buscarDisponibles = async (req, res) => {
+  const { fecha_inicio, fecha_fin } = req.query;
+
+  if (!fecha_inicio || !fecha_fin) {
+    return res.status(400).json({
+      error: 'Parámetros requeridos: fecha_inicio y fecha_fin (YYYY-MM-DD)',
+    });
+  }
+
+  if (new Date(fecha_inicio) >= new Date(fecha_fin)) {
+    return res.status(400).json({
+      error: 'fecha_inicio debe ser anterior a fecha_fin',
+    });
+  }
+
+  try {
+    // IDs de vehículos con reservas activas que se solapan con el rango
+    const reservasSolapadas = await Reserva.findAll({
+      attributes: ['vehiculo_id'],
+      where: {
+        estado: { [Op.ne]: 'cancelada' },
+        fecha_inicio: { [Op.lt]: fecha_fin },
+        fecha_fin:    { [Op.gt]: fecha_inicio },
+      },
+      raw: true,
+    });
+
+    const idsOcupados = reservasSolapadas.map((r) => r.vehiculo_id);
+
+    const vehiculosDisponibles = await Vehiculo.findAll({
+      where: idsOcupados.length
+        ? { id: { [Op.notIn]: idsOcupados } }
+        : {},
+    });
+
+    return res.json({
+      fecha_inicio,
+      fecha_fin,
+      total: vehiculosDisponibles.length,
+      vehiculos: vehiculosDisponibles,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Error al consultar disponibilidad' });
+  }
+};

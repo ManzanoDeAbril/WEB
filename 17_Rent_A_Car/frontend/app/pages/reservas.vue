@@ -162,6 +162,7 @@ onMounted(() => {
 
     <button @click="navigateTo('/vehiculos')">Vehículos</button>
     <button @click="navigateTo('/reservas')">Reservas</button>
+    <button @click="navigateTo('/disponibilidad')">Disponibilidad</button>
     <button @click="logout">Cerrar sesión</button>
 
     <hr>

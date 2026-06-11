@@ -8,6 +8,8 @@ router.get('/', authenticate, vehiculosController.obtenerVehiculos);
 
 router.post('/', authenticate, vehiculosController.crearVehiculo);
 
+router.get('/disponibles', authenticate, vehiculosController.buscarDisponibles);
+
 router.get('/:id', authenticate, vehiculosController.obtenerVehiculoPorId);
 
 router.put('/:id', authenticate, vehiculosController.actualizarVehiculo);

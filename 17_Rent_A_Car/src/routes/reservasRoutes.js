@@ -8,6 +8,7 @@ router.get('/', authenticate, reservasController.obtenerReservas);
 
 router.post('/', authenticate, reservasController.crearReserva);
 
+
 router.get('/:id', authenticate, reservasController.obtenerReservaPorId);
 
 router.put('/:id', authenticate, reservasController.actualizarReserva);
