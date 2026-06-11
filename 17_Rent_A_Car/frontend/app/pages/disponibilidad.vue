@@ -1,10 +1,10 @@
 <script setup>
-// rq-07: Consulta de disponibilidad por fechas
-import { useApi } from '~/composables/api';
+import { ref } from 'vue'
+import { API_URL } from '../composables/api'
 
-definePageMeta({ middleware: 'auth' });
-
-const { apiFetch } = useApi();
+definePageMeta({
+  middleware: 'auth'
+})
 
 const fechaInicio  = ref('');
 const fechaFin     = ref('');
@@ -14,30 +14,56 @@ const cargando     = ref(false);
 const error        = ref('');
 
 async function buscar() {
-  error.value    = '';
-  vehiculos.value = [];
-  buscado.value  = false;
+
+  error.value = ''
+  vehiculos.value = []
+  buscado.value = false
 
   if (!fechaInicio.value || !fechaFin.value) {
-    error.value = 'Completá ambas fechas.';
-    return;
-  }
-  if (new Date(fechaInicio.value) >= new Date(fechaFin.value)) {
-    error.value = 'La fecha de inicio debe ser anterior a la fecha de fin.';
-    return;
+    error.value = 'Completa ambas fechas'
+    return
   }
 
-  cargando.value = true;
+  cargando.value = true
+
   try {
-    const params  = new URLSearchParams({ fecha_inicio: fechaInicio.value, fecha_fin: fechaFin.value });
-    const data    = await apiFetch(`/vehiculos/disponibles?${params}`);
-    vehiculos.value = data.vehiculos ?? [];
-    buscado.value  = true;
+
+    const params = new URLSearchParams({
+      fecha_inicio: fechaInicio.value,
+      fecha_fin: fechaFin.value
+    })
+
+    const token = localStorage.getItem('token')
+
+    const response = await fetch(
+      `${API_URL}/vehiculos/disponibles?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      error.value = data.error
+      return
+    }
+
+    vehiculos.value = data.vehiculos
+    buscado.value = true
+
   } catch (e) {
-    error.value = e?.data?.error ?? 'Error al consultar disponibilidad.';
+
+    error.value = 'Error de conexión'
+
   } finally {
-    cargando.value = false;
+
+    cargando.value = false
+
   }
+
 }
 
 function logout() {

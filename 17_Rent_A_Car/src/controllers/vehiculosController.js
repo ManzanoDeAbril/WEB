@@ -1,4 +1,5 @@
-const { Vehiculo } = require('../../models');
+const { Vehiculo, Reserva } = require('../../models');
+const { Op } = require('sequelize');
 
 exports.obtenerVehiculos = async (req, res) => {
 
