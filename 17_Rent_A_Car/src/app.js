@@ -12,11 +12,16 @@ const vehiculosRoutes = require('./routes/vehiculosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const panelRoutes     = require('./routes/panelRoutes'); 
+const extrasRoutes = require('./routes/extrasRoutes');
+const multasRoutes = require('./routes/multasRoutes');
 
 app.use('/vehiculos', vehiculosRoutes);
 app.use('/reservas', reservasRoutes);
 app.use('/usuarios', usuariosRoutes);
-app.use('/panel',     panelRoutes);    
+app.use('/panel',     panelRoutes);
+app.use('/extras', extrasRoutes);
+app.use('/multas', multasRoutes);
+
 
 app.get('/', (req, res) => {
     res.json({

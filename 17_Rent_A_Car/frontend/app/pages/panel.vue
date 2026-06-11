@@ -46,6 +46,7 @@ onMounted(() => cargarPanel())
     <button @click="navigateTo('/reservas')">Reservas</button>
     <button @click="navigateTo('/disponibilidad')">Disponibilidad</button>
     <button @click="logout">Cerrar sesión</button>
+   <button @click="navigateTo('/rq10')">⚙️ Extras & Multas</button>
 
     <hr>
 
