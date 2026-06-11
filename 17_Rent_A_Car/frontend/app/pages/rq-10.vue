@@ -180,7 +180,7 @@
         </div>
         <div>
           <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:3px;">Cant.</label>
-          <input v-model="asigCantidad" type="number" min="1" value="1"
+          <input v-model="asigCantidad" type="number" min="1"
                  style="width:100%; padding:8px; border:1px solid #ced4da; border-radius:4px; box-sizing:border-box;" />
         </div>
         <button @click="agregarExtraAReserva"
