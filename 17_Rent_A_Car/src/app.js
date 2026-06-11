@@ -11,10 +11,12 @@ app.use(express.json());
 const vehiculosRoutes = require('./routes/vehiculosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
+const panelRoutes     = require('./routes/panelRoutes'); 
 
 app.use('/vehiculos', vehiculosRoutes);
 app.use('/reservas', reservasRoutes);
 app.use('/usuarios', usuariosRoutes);
+app.use('/panel',     panelRoutes);    
 
 app.get('/', (req, res) => {
     res.json({
