@@ -32,7 +32,7 @@ const login = async () => {
 
     localStorage.setItem('token', data.token)
 
-    navigateTo('/vehiculos')
+    navigateTo('/panel')
 
   } catch (err) {
 
