@@ -99,24 +99,43 @@ const error         = ref('')
 const exito         = ref(false)
 
 const restablecer = async () => {
+
   if (nuevaPassword.value !== confirmar.value) return
-  error.value  = ''
-  exito.value  = false
+
+  error.value = ''
+  exito.value = false
   cargando.value = true
 
   try {
-    await $fetch(`${BASE}/auth/restablecer-password`, {
+
+    const respuesta = await $fetch(`${BASE}/auth/restablecer-password`, {
       method: 'POST',
       body: {
         token: token.value,
         nueva_password: nuevaPassword.value
       }
     })
+
+    console.log(respuesta)
+
     exito.value = true
+
   } catch (e) {
-    error.value = e?.data?.error || 'Error al restablecer la contraseña'
+
+    console.error(e)
+
+    error.value =
+      e?.data?.error ||
+      e?.data?.mensaje ||
+      e?.message ||
+      'Error al restablecer la contraseña'
+
   } finally {
+
     cargando.value = false
+
   }
+
 }
+
 </script>

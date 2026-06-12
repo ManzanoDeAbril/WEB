@@ -54,7 +54,7 @@ async function solicitar() {
   tokenDev.value = ''
 
   try {
-    const data = await $fetch('/auth/solicitar-reset', {
+    const data = await $fetch('http://localhost:3000/auth/solicitar-reset', {
       method: 'POST',
       body: { email: email.value },
     })
