@@ -14,6 +14,7 @@ const usuariosRoutes = require('./routes/usuariosRoutes');
 const panelRoutes     = require('./routes/panelRoutes'); 
 const extrasRoutes = require('./routes/extrasRoutes');
 const multasRoutes = require('./routes/multasRoutes');
+const authRoutes = require('./routes/authRoutes');   
 
 app.use('/vehiculos', vehiculosRoutes);
 app.use('/reservas', reservasRoutes);
@@ -21,7 +22,7 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/panel',     panelRoutes);
 app.use('/extras', extrasRoutes);
 app.use('/multas', multasRoutes);
-
+app.use('/auth', authRoutes); 
 
 app.get('/', (req, res) => {
     res.json({

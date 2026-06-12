@@ -52,6 +52,15 @@
           <span v-else>Iniciar sesión</span>
         </button>
 
+        <div style="text-align:center; margin-top:12px;">
+  <button
+    @click="navigateTo('/solicitar-reset')"
+    style="background:none; border:none; color:#3b82f6; cursor:pointer; font-size:13px; text-decoration:underline;"
+  >
+    ¿Olvidaste tu contraseña?
+  </button>
+</div>
+
         <div v-if="error" class="error-message">
           ⚠️ {{ error }}
         </div>
