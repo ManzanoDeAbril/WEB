@@ -8,6 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/test-error', (req, res) => {
+  throw new Error('Error de prueba');
+});
+
+
+
 const errorHandler = require('./middlewares/errorHandler');
 const notFound = require('./middlewares/notFound');
 

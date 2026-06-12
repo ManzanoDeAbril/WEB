@@ -16,6 +16,13 @@ static associate(models) {
 }
   }
   Vehiculo.init({
+
+    categoria: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'Sedán'
+    },
+    
     marca: DataTypes.STRING,
     modelo: DataTypes.STRING,
     anio: DataTypes.INTEGER,
@@ -29,4 +36,6 @@ static associate(models) {
   });
   return Vehiculo;
 };
+
+
 

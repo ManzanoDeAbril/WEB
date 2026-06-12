@@ -1,67 +1,87 @@
 const { Vehiculo, Reserva } = require('../../models');
 const { Op } = require('sequelize');
 
-exports.obtenerVehiculos = async (req, res) => {
+exports.obtenerVehiculos = async (req, res, next) => {
 
-    try {
+  try {
 
-        const vehiculos = await Vehiculo.findAll();
+    const vehiculos = await Vehiculo.findAll();
 
-        res.json(vehiculos);
+    res.json(vehiculos);
 
-    } catch (error) {
+  } catch (error) {
 
-        res.status(500).json({
-            error: error.message
-        });
+    next(error);
 
-    }
+  }
 
 };
-
 exports.crearVehiculo = async (req, res) => {
+    
+const {
+    marca,
+    modelo,
+    anio,
+    patente,
+    categoria,
+    color,
+    kilometraje,
+    disponible
+} = req.body;
 
-    const {
-        marca,
-        modelo,
-        anio,
-        patente,
-        color,
-        kilometraje,
-        disponible
-    } = req.body;
+  if (!marca || !modelo || !anio || !patente) {
+    return res.status(400).json({
+      error: true,
+      message: 'Faltan campos obligatorios'
+    });
+  }
 
-    if (!marca || !modelo || !anio || !patente) {
-        return res.status(400).json({
-            error: 'Faltan campos obligatorios'
-        });
+  if (
+    !Number.isInteger(Number(anio)) ||
+    anio < 1900 ||
+    anio > new Date().getFullYear() + 1
+  ) {
+    return res.status(422).json({
+      error: true,
+      message: 'Año inválido'
+    });
+  }
+
+  try {
+
+    const existe = await Vehiculo.findOne({
+      where: { patente }
+    });
+
+    if (existe) {
+      return res.status(409).json({
+        error: true,
+        message: 'La patente ya está registrada'
+      });
     }
 
-    try {
+const vehiculo = await Vehiculo.create({
+    marca,
+    modelo,
+    anio,
+    patente,
+    categoria,
+    color,
+    kilometraje: kilometraje || 0,
+    disponible: disponible ?? true
+});
+    res.status(201).json({
+      mensaje: 'Vehículo creado',
+      id: vehiculo.id
+    });
 
-        const vehiculo = await Vehiculo.create({
-            marca,
-            modelo,
-            anio,
-            patente,
-            color,
-            kilometraje: kilometraje || 0,
-            disponible: disponible ?? true
-        });
+  } catch (error) {
 
-        res.status(201).json({
-            mensaje: 'Vehículo creado',
-            id: vehiculo.id
-        });
+    res.status(500).json({
+      error: error.message
+    });
 
-    } catch (error) {
-
-        res.status(500).json({
-            error: error.message
-        });
-
-    }
-
+  }
 };
 
 exports.obtenerVehiculoPorId = async (req, res) => {
@@ -92,15 +112,16 @@ exports.obtenerVehiculoPorId = async (req, res) => {
 
 exports.actualizarVehiculo = async (req, res) => {
 
-    const {
-        marca,
-        modelo,
-        anio,
-        patente,
-        color,
-        kilometraje,
-        disponible
-    } = req.body;
+const {
+    marca,
+    modelo,
+    anio,
+    patente,
+    categoria,
+    color,
+    kilometraje,
+    disponible
+} = req.body;
 
     try {
 
@@ -114,15 +135,16 @@ exports.actualizarVehiculo = async (req, res) => {
             });
         }
 
-        await vehiculo.update({
-            marca,
-            modelo,
-            anio,
-            patente,
-            color,
-            kilometraje,
-            disponible
-        });
+await vehiculo.update({
+    marca,
+    modelo,
+    anio,
+    patente,
+    categoria,
+    color,
+    kilometraje,
+    disponible
+});
 
         res.json({
             mensaje: 'Vehículo actualizado'
