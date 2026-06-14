@@ -2,10 +2,11 @@
   "name": "17_rent_a_car",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
-  },
+"scripts": {
+  "start": "node src/app.js",
+  "dev": "nodemon src/app.js",
+  "migrate": "npx sequelize-cli db:migrate"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
