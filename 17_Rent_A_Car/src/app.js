@@ -35,17 +35,19 @@ app.use('/extras', extrasRoutes);
 app.use('/multas', multasRoutes);
 app.use('/auth', authRoutes); 
 
+app.get('/', (req, res) => {
+    res.json({
+        mensaje: 'Rent A Car API funcionando'
+    });
+});
+ 
+
 // 404
 app.use(notFound);
 
 // Error Handler
 app.use(errorHandler);
 
-app.get('/', (req, res) => {
-    res.json({
-        mensaje: 'Rent A Car API funcionando'
-    });
-});
 
 
 sequelize.authenticate()
