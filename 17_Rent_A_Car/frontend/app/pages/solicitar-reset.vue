@@ -43,6 +43,9 @@
 </template>
 
 <script setup>
+
+import { API_URL } from '../composables/api'
+
 const email = ref('')
 const loading = ref(false)
 const error = ref('')
@@ -54,8 +57,7 @@ async function solicitar() {
   tokenDev.value = ''
 
   try {
-    const data = await $fetch('http://localhost:3000/auth/solicitar-reset', {
-      method: 'POST',
+  const data = await $fetch(`${API_URL}/auth/solicitar-reset`, {      method: 'POST',
       body: { email: email.value },
     })
     tokenDev.value = data.token_dev || ''
