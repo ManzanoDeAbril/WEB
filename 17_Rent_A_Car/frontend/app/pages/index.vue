@@ -47,10 +47,14 @@
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; }
 
 .page {
   min-height: 100vh;
+  background: #0f0f1a;
+  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
